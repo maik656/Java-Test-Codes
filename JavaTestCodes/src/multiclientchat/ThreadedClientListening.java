@@ -13,14 +13,13 @@ import java.io.IOException;
  */
 public class ThreadedClientListening extends Thread {
     
-    BufferedReader bfr;
-    String receivedText;
-    String friendNick;
+    private BufferedReader bfr;
+    private String receivedText;
+    private String friendNick;
     
     public ThreadedClientListening(BufferedReader parambfr) {
         bfr = parambfr;
-        friendNick = "The Server";
-                
+        friendNick = "The Server";                
     }
     
     @Override

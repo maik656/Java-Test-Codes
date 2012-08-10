@@ -16,19 +16,29 @@ import java.net.Socket;
  */
 public class ClientChat {
     
-    public static void main(String[] args) throws IOException {
-        Socket clientSocket;
+    private Socket clientSocket;
+    private BufferedReader inputKeyboard;
+    private PrintWriter pw;
+    private BufferedReader bfr;
+    private String ipServer;
+    private String clientNick;
+    private String friendNick;
+    private ThreadedClientListening tcl;
     
-        BufferedReader bfr;
-        PrintWriter pw;
-        ThreadedClientListening tcl;
+    public ClientChat() {
         
-        System.out.println("Client Side");
-        System.out.println("Basic Chat Program");
+    }
     
-        BufferedReader inputKeyboard = new BufferedReader(new InputStreamReader(System.in));
+    private void initialize() throws IOException {
+        initializeConnection();
+        handleWritings();
+        finalizeConnection();        
+    }
+    
+    private void initializeConnection() throws IOException {
+        inputKeyboard = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Please introduce the ip of the Chat Server");
-        String ipServer = inputKeyboard.readLine();
+        ipServer = inputKeyboard.readLine();
         
         clientSocket = new Socket(ipServer, 8888);
         
@@ -38,23 +48,31 @@ public class ClientChat {
         
         pw = new PrintWriter(clientSocket.getOutputStream(),true);
                     
-        String clientNick = inputKeyboard.readLine();
+        clientNick = inputKeyboard.readLine();
         pw.println(clientNick);
         
         
         System.out.println("Please enter the nick of the person you want to talk");
-        String friendNick = inputKeyboard.readLine();        
+        friendNick = inputKeyboard.readLine();        
         pw.println(friendNick);
         
-        tcl.setFriendNick(friendNick);
-        
-        
+        tcl.setFriendNick(friendNick);        
+    }
+    
+    private void handleWritings() throws IOException {
         String textToSend;
-        while((textToSend = inputKeyboard.readLine()) != null) {
-            pw.println(textToSend);            
-        }
+        while((textToSend = inputKeyboard.readLine()) != null) pw.println(textToSend);       
+    }
+    
+    private void finalizeConnection() throws IOException {
         clientSocket.close();
         bfr.close();
         pw.close();
+    }
+    
+    public static void main(String[] args) throws IOException  {
+        System.out.println("Client Side");
+        System.out.println("Basic Chat Program");
+        new ClientChat().initialize();
     }
 }
