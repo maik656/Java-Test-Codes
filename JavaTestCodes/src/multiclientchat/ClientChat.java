@@ -41,11 +41,12 @@ public class ClientChat {
         String clientNick = inputKeyboard.readLine();
         pw.println(clientNick);
         
-        tcl.setFriendNick(clientNick);
         
         System.out.println("Please enter the nick of the person you want to talk");
         String friendNick = inputKeyboard.readLine();        
         pw.println(friendNick);
+        
+        tcl.setFriendNick(friendNick);
         
         
         String textToSend;
