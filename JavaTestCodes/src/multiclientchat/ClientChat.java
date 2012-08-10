@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -35,7 +34,6 @@ public class ClientChat {
         bfr = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         new ThreadedClientListening(bfr).start();
         
-        System.out.println("Please introduce the ip of the Client that you want to talk");
         String ipClient = inputKeyboard.readLine();
         
         pw = new PrintWriter(clientSocket.getOutputStream(),true);

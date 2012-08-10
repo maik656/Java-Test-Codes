@@ -35,7 +35,7 @@ public class ThreadedServerPetition extends Thread {
     public void run() {
         try {
             System.out.println("Connection made With Client");
-            pw.println("Connection made With The Server");
+            pw.println("Connection made With The Server, Please introduce the ip of the Client that you want to talk");
             whoWantsToConnect = bfr.readLine(); //reads the ip that this client wants to connect
             System.out.println("Received who wants to connect: to " + whoWantsToConnect);
             boolean waitingConnection = true;
