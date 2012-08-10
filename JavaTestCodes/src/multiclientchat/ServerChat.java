@@ -7,6 +7,7 @@ package multiclientchat;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -14,10 +15,10 @@ import java.util.ArrayList;
  */
 public class ServerChat {
     
-    ArrayList<ThreadedServerPetition> clientList;
+    ConcurrentHashMap<String,ThreadedServerPetition> clientList;
     
     public void begin() throws IOException {
-        clientList = new ArrayList<ThreadedServerPetition> ();
+        clientList = new ConcurrentHashMap<String,ThreadedServerPetition> ();
         ServerSocket listenSocket = new ServerSocket(8888);
         
         System.out.println("Server Side");
@@ -25,7 +26,6 @@ public class ServerChat {
         boolean listening = true;
         while(listening) {
             ThreadedServerPetition tsp = new ThreadedServerPetition(listenSocket.accept(), clientList);
-            clientList.add(tsp);
             tsp.start();
         }
         listenSocket.close();

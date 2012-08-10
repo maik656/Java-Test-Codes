@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Miquel
@@ -20,14 +23,15 @@ public class ThreadedServerPetition extends Thread {
     PrintWriter pw;
     Socket clientSocket;
     String whoWantsToConnect;
-    int indexConnectedClient;
-    ArrayList<ThreadedServerPetition> clientList;
+    String clientNick;
+    ConcurrentHashMap<String,ThreadedServerPetition> clientList;
     
-    public ThreadedServerPetition(Socket recvSock, ArrayList<ThreadedServerPetition> listRecv) throws IOException {
+    public ThreadedServerPetition(Socket recvSock, ConcurrentHashMap<String,ThreadedServerPetition> listRecv) throws IOException {
         clientSocket = recvSock;
         bfr = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         pw = new PrintWriter(clientSocket.getOutputStream(), true);
-        whoWantsToConnect = null;
+        whoWantsToConnect = new String();
+        clientNick = new String();
         clientList = listRecv;
     }
     
@@ -35,27 +39,17 @@ public class ThreadedServerPetition extends Thread {
     public void run() {
         try {
             System.out.println("Connection made With Client");
-            pw.println("Connection made With The Server, Please introduce the ip of the Client that you want to talk");
+            pw.println("Connection made With The Server, Please Enter Your Nick");
+            clientNick = bfr.readLine();
             whoWantsToConnect = bfr.readLine(); //reads the ip that this client wants to connect
-            System.out.println("Received who wants to connect: to " + whoWantsToConnect);
-            /*if (whoWantsToConnect == null) System.out.println("Esta vacio");
-            if (whoWantsToConnect.equals(null)) System.out.println("Esta vacio null");*/
+            System.out.println(clientNick + " Entered to the server");
+            System.out.println(clientNick + " Wants to talk with " + whoWantsToConnect);
+            clientList.put(clientNick,this);
             boolean waitingConnection = true;
-            while (waitingConnection) {
-                for (int i = 0; waitingConnection == true && i < clientList.size(); ++i) {
-                    if (getClientIp().equals(clientList.get(i).getWhoWantsToConnect()) && this.equals(clientList.get(i)) == false) {
-                        System.out.println("acierto");
-                        indexConnectedClient = i;
-                        waitingConnection = false;
-                    }
-                }
-            }
-            System.out.println("Ha salido del bucle");
+            while (clientList.containsKey(whoWantsToConnect) == false) ;
             pw.println("Connection Established Correctly with " + whoWantsToConnect + ". You Can Write Messages Now");
             String receivedText;
-            while ((receivedText = bfr.readLine()) != null) {
-                clientList.get(indexConnectedClient).writeTo(receivedText);
-            }
+            while ((receivedText = bfr.readLine()) != null) clientList.get(whoWantsToConnect).writeTo(receivedText);
             bfr.close();
             pw.close();
             clientSocket.close();
@@ -65,8 +59,8 @@ public class ThreadedServerPetition extends Thread {
         }
     }
     
-    public String getClientIp() {
-        return clientSocket.getInetAddress().getHostAddress();
+    public String getClientNick() {
+        return clientNick;
     }
     
     public String getWhoWantsToConnect() {

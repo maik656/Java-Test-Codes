@@ -21,6 +21,7 @@ public class ClientChat {
     
         BufferedReader bfr;
         PrintWriter pw;
+        ThreadedClientListening tcl;
         
         System.out.println("Client Side");
         System.out.println("Basic Chat Program");
@@ -32,12 +33,20 @@ public class ClientChat {
         clientSocket = new Socket(ipServer, 8888);
         
         bfr = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        new ThreadedClientListening(bfr).start();
-        
-        String ipClient = inputKeyboard.readLine();
+        tcl = new ThreadedClientListening(bfr);
+        tcl.start();
         
         pw = new PrintWriter(clientSocket.getOutputStream(),true);
-        pw.println(ipClient);
+                    
+        String clientNick = inputKeyboard.readLine();
+        pw.println(clientNick);
+        
+        tcl.setFriendNick(clientNick);
+        
+        System.out.println("Please enter the nick of the person you want to talk");
+        String friendNick = inputKeyboard.readLine();        
+        pw.println(friendNick);
+        
         
         String textToSend;
         while((textToSend = inputKeyboard.readLine()) != null) {
