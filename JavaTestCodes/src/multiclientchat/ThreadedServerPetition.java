@@ -38,6 +38,8 @@ public class ThreadedServerPetition extends Thread {
             pw.println("Connection made With The Server, Please introduce the ip of the Client that you want to talk");
             whoWantsToConnect = bfr.readLine(); //reads the ip that this client wants to connect
             System.out.println("Received who wants to connect: to " + whoWantsToConnect);
+            /*if (whoWantsToConnect == null) System.out.println("Esta vacio");
+            if (whoWantsToConnect.equals(null)) System.out.println("Esta vacio null");*/
             boolean waitingConnection = true;
             while (waitingConnection) {
                 for (int i = 0; waitingConnection == true && i < clientList.size(); ++i) {
