@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -21,25 +22,28 @@ public class ClientChat {
     
         BufferedReader bfr;
         PrintWriter pw;
+        
+        System.out.println("Client Side");
+        System.out.println("Basic Chat Program");
     
         BufferedReader inputKeyboard = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Please introduce the ip of the Chat Server");
         String ipServer = inputKeyboard.readLine();
         
-        System.out.println("Please introduce the ip of the Client that you want to talk");
-        String ipClient = inputKeyboard.readLine();
-        
         clientSocket = new Socket(ipServer, 8888);
-        
-        pw = new PrintWriter(clientSocket.getOutputStream(),true);
-        pw.print(ipClient);
         
         bfr = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         new ThreadedClientListening(bfr).start();
         
+        System.out.println("Please introduce the ip of the Client that you want to talk");
+        String ipClient = inputKeyboard.readLine();
+        
+        pw = new PrintWriter(clientSocket.getOutputStream(),true);
+        pw.println(ipClient);
+        
         String textToSend;
         while((textToSend = inputKeyboard.readLine()) != null) {
-            pw.print(textToSend);            
+            pw.println(textToSend);            
         }
         clientSocket.close();
         bfr.close();
