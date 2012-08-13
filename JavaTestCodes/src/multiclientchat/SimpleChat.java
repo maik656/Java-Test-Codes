@@ -4,6 +4,8 @@
  */
 package multiclientchat;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Miquel
@@ -11,6 +13,10 @@ package multiclientchat;
 public class SimpleChat {
     
     public static void main(String[] args) {
-        new MainView();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new MainView();
+            }
+        });
     }
 }
