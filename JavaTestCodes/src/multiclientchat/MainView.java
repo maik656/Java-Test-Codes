@@ -5,6 +5,7 @@
 package multiclientchat;
 
 import java.awt.Dimension;
+import java.net.Socket;
 import javax.swing.*;
 
 /**
@@ -17,6 +18,8 @@ public class MainView {
     
     private JMenuBar mainMenu;
     
+    private Socket clientSocket;
+    
     public MainView() {
         
     }
@@ -26,7 +29,7 @@ public class MainView {
         initializeInitialFrame();
         initializeMainMenu();
         
-        ConnectionDialog cd = new ConnectionDialog(initialView);
+        ConnectionDialog cd = new ConnectionDialog(initialView, clientSocket);
         initialView.pack();
         initialView.setVisible(true);
         cd.setVisible(true);
