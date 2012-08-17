@@ -18,10 +18,11 @@ public class MainView {
     private JMenuBar mainMenu;
     
     public MainView() {
-        initializeComponents();
+        
     }
     
-    private void initializeComponents() {
+    
+    public void initialize() {
         initializeInitialFrame();
         initializeMainMenu();
         
