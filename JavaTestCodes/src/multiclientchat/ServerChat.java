@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServerChat {
     
     private ConcurrentHashMap<String,ThreadedServerPetition> clientList;
-    ServerSocket listenSocket;   
+    ServerSocket listenSocket; 
     
     public void ServerChat() {
         
